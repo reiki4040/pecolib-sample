@@ -44,12 +44,12 @@ func main() {
 		peco.NewNoMatch(thing3, true),
 	}
 
-	result, err := peco.Pecolib(matches, "which do you choice the model? >")
+	result, err := peco.PecolibWithPrompt(matches, "which do you choice the model? >")
 	if err != nil {
 		fmt.Printf("pecolib error: %v", err)
 	}
 
-	result2, err := peco.Pecolib(matches, "which do you choice the model if sold out that you previous choose one? >")
+	result2, err := peco.PecolibWithPrompt(matches, "which do you choice the model if sold out that you previous choose one? >")
 
 	if err != nil {
 		fmt.Printf("pecolib error: %v", err)
