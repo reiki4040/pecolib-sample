@@ -7,72 +7,57 @@ import (
 )
 
 type Something struct {
-	buf         string
 	Name        string
 	Description string
 	Price       int
 }
 
-func NewSomething(buf, name, description string, price int) *Something {
+func NewSomething(name, description string, price int) *Something {
 	return &Something{
-		buf:         buf,
 		Name:        name,
 		Description: description,
 		Price:       price,
 	}
 }
 
-func (o *Something) Okay() string {
-	return "okay! " + o.Name
+func (o *Something) Info() string {
+	return fmt.Sprintf("%s : %s price: %d", o.Name, o.Description, o.Price)
+}
+
+func (o *Something) Choice() string {
+	return o.Name
 }
 
 func main() {
-	thing1 := "iPhone6"
-	thing2 := "iPhone6 plus"
-	thing3 := "iPhone5s"
-
-	obj_map := map[string]*Something{
-		thing1: NewSomething("iPhone6 Buffer", thing1, "new model iPhone 2014/9", 67800),
-		thing2: NewSomething("iPhone6 plus Buffer", thing2, "new big model iPhone 2014/9", 79800),
-		thing3: NewSomething("iPhone5s Buffer", thing3, "previous model iPhone 2013/9", 57800),
+	choices := []peco.Choosable{
+		NewSomething("iPhone6", "new model iPhone 2014/9", 67800),
+		NewSomething("iPhone6 plus", "new big model iPhone 2014/9", 79800),
+		NewSomething("iPhone5s", "previous model iPhone 2013/9", 57800),
 	}
 
-	// TODO what is boolean
-	matches := []peco.Match{
-		peco.NewNoMatch(thing1, true),
-		peco.NewNoMatch(thing2, true),
-		peco.NewNoMatch(thing3, true),
-	}
-
-	result, err := peco.PecolibWithPrompt(matches, "which do you choice the model? >")
+	result, err := peco.PecolibWithPrompt(choices, "which do you choose the model? >")
 	if err != nil {
 		fmt.Printf("pecolib error: %v", err)
 	}
 
-	result2, err := peco.PecolibWithPrompt(matches, "which do you choice the model if sold out that you previous choose one? >")
-
+	result2, err := peco.PecolibWithPrompt(choices, "which do you choose the model if sold out that you previous chosen one? >")
 	if err != nil {
 		fmt.Printf("pecolib error: %v", err)
 	}
 
 	for _, r := range result {
-		orig := r.Output()
-		v, ok := obj_map[orig]
-		if ok {
-			fmt.Printf("you choose first: %s\n", v.Okay())
+		if t, ok := r.(*Something); ok {
+			fmt.Printf("you choose first: %s\n", t.Info())
 		} else {
-			fmt.Println("Fail!")
+			fmt.Println("invalid struct returns from pecolib")
 		}
 	}
 
 	for _, r := range result2 {
-		orig := r.Output()
-		v, ok := obj_map[orig]
-		if ok {
-			fmt.Printf("you choose second: %s\n", v.Okay())
+		if t, ok := r.(*Something); ok {
+			fmt.Printf("you choose second: %s\n", t.Info())
 		} else {
-			fmt.Println("Fail!")
+			fmt.Println("invalid struct returns from pecolib")
 		}
 	}
-
 }
