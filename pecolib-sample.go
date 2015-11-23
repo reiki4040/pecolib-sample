@@ -20,7 +20,7 @@ func NewSomething(name, description string, price int) *Something {
 	}
 }
 
-func (o *Something) Info() string {
+func (o *Something) Value() string {
 	return fmt.Sprintf("%s : %s price: %d", o.Name, o.Description, o.Price)
 }
 
@@ -47,7 +47,7 @@ func main() {
 
 	for _, r := range result {
 		if t, ok := r.(*Something); ok {
-			fmt.Printf("you choose first: %s\n", t.Info())
+			fmt.Printf("you choose first: %s\n", t.Value())
 		} else {
 			fmt.Println("invalid struct returns from pecolib")
 		}
@@ -55,7 +55,7 @@ func main() {
 
 	for _, r := range result2 {
 		if t, ok := r.(*Something); ok {
-			fmt.Printf("you choose second: %s\n", t.Info())
+			fmt.Printf("you choose second: %s\n", t.Value())
 		} else {
 			fmt.Println("invalid struct returns from pecolib")
 		}
